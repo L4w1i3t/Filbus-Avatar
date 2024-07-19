@@ -41,6 +41,23 @@ async def send_gif_every_hour(channel):
         await asyncio.sleep(3600)
 
 @client.event
+async def on_message(message):
+
+    if message.author.bot:
+        return
+    
+    if message.guild is None:
+        await message.channel.send('https://tenor.com/view/filbus-gif-15763565782588620290')
+        print("Received a direct message")
+        return
+
+def setup_events(bot):
+    bot.add_listener(on_ready)
+    async def on_message_wrapper(message):
+        await on_message(message, bot)
+    bot.add_listener(on_message_wrapper, 'on_message')
+
+@client.event
 async def on_disconnect():
     if channel_id:
         channel = client.get_channel(channel_id)
